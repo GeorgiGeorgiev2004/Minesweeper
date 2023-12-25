@@ -1,2 +1,4 @@
 ﻿  Minesweeper.cpp
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(17,28): warning C4018: '<': signed/unsigned mismatch
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(80,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Minesweeper.vcxproj -> D:\su Education\Minesweeper\Minesweeper\x64\Debug\Minesweeper.exe
