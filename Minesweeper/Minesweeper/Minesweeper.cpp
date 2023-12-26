@@ -6,17 +6,33 @@ const int MIN_SIZE = 3;
 const int MIN_MINES = 1;
 const int MATRIX_FOUNDATION = 45; // ASCII code for #
 const int MATRIX_MINE = '*';
+const int MATRIX_REVEALED_SIGN = 46;
 
 // I'm not really sure if using built in randomisers is allowed 
 // Having pondered on this question for a while I came to a realisation
 // I appear to be lacking the capabilities to implement it in another way.
 // As such I will take advantage of all such functionality.
 
+bool bombs_makred(char** real,char** player,int rows,int cols) 
+{
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            if (real[i][j]==MATRIX_MINE&&player[i][j]!='M')
+            {
+                return false;
+            }
+        }
+    }
+}
+
 //simple function that verifies that a certain element is in the voundaries of the array.
 bool is_in_matrix(int row, int col, int rows, int cols)
 {
     return (row >= 0) && (row < rows) && (col >= 0) && (col < cols);
 }
+//Marks a tile or unmarks is depending on the bool variable marked
 void mark(char** matrix, int row, int col, bool marked)
 {
     if (marked)
@@ -28,6 +44,70 @@ void mark(char** matrix, int row, int col, bool marked)
         matrix[row][col] = 'M';
     }
 }
+// After switching all seen 0's to the MATRIX_REVEALED_SIGN we reveal all tiles surrounding them.
+void reveal_matrix(char** real_matrix, char** player_matrix,int rows,int cols)
+{
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            //A lot of if's for a rather easy task.
+            if (real_matrix[i][j] == MATRIX_REVEALED_SIGN)
+            {
+                if (is_in_matrix(i - 1, j, rows, cols))
+                {
+                    player_matrix[i - 1][j] = real_matrix[i - 1][j];
+                }
+                if (is_in_matrix(i + 1, j, rows, cols))
+                {
+                    player_matrix[i + 1][j] = real_matrix[i + 1][j];
+                }
+                if (is_in_matrix(i, j+1, rows, cols))
+                {
+                    player_matrix[i ][j+1] = real_matrix[i][j+1];
+                }
+                if (is_in_matrix(i, j-1, rows, cols))
+                {
+                    player_matrix[i][j-1] = real_matrix[i][j-1];
+                }
+                if (is_in_matrix(i - 1, j-1, rows, cols))
+                {
+                    player_matrix[i - 1][j-1] = real_matrix[i - 1][j-1];
+                }
+                if (is_in_matrix(i - 1, j+1, rows, cols))
+                {
+                    player_matrix[i - 1][j+1] = real_matrix[i - 1][j+1];
+                }
+                if (is_in_matrix(i + 1, j-1, rows, cols))
+                {
+                    player_matrix[i + 1][j-1] = real_matrix[i + 1][j - 1];
+                }
+                if (is_in_matrix(i + 1, j+1, rows, cols))
+                {
+                    player_matrix[i + 1][j+1] = real_matrix[i + 1][j + 1];
+                }
+            }
+        }
+    }
+}
+//Flood Fill algorithm reveals all the 0's the real matrix.
+void replace_empty_spaces(char** real_matrix,char** player_matrix,int rows,int cols,int row,int col) 
+{
+    if (!is_in_matrix(row,col,rows,cols)|| real_matrix[row][col] != '0')
+    {
+        return;
+    }
+    real_matrix[row][col] = MATRIX_REVEALED_SIGN;
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col-1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col-1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col-1);
+}
+//basic rewrite of the place_bomb function 
 void replace_bomb(char** matrix, int row, int col, int rows, int cols)
 {
     bool map[MAX_SIZE][MAX_SIZE] = { {0} };
@@ -179,6 +259,7 @@ void print_matrix(char** matrix, const int rows, const int cols)
         }
         std::cout << std::endl;
     }
+    std::cout << "\n";
 }
 
 char** create_matrix(const int rows, const int cols) {
@@ -235,14 +316,6 @@ void welcome_text() {
     }
 }
 
-int try_terminate(char** real_matrix, char** player_matrix, int row, int col, int rows, int cols)
-{
-
-
-    return 1;
-}
-
-
 //Core game mechanics.
 void game()
 {
@@ -287,7 +360,14 @@ void game()
         << "Unravel : open x y \n"
         << "Mark : mark x y \n"
         << "Unmark : unmark x y \n";
+
+    print_matrix(player_matrix, n, n);
     while (game_on) {
+        if (bombs_makred(real_matrix,player_matrix,n,n))
+        {
+            std::cout << "You won! Congratulations!";
+            game_on = false; break;
+        }
         char command[6] = { 0 };
         int x = 0;
         int y = 0;
@@ -308,14 +388,15 @@ void game()
             if (command[0] == 'm' && command[1] == 'a' && command[2] == 'r' && command[3] == 'k') break;
             if (command[0] == 'u' && command[1] == 'n' && command[2] == 'm' && command[3] == 'a' && command[4] == 'r' && command[5] == 'k') break;
             if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd')break;
-            std::cout << "Please enter a valid command!";
+            std::cout << "Please enter a valid command! : ";
             std::cin >> command;
         }
+        if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd') { game_on = false; break; }
         std::cin >> x;
         std::cin >> y;
         while (x > n - 1 || y > n - 1 || x < 0 || y < 0)
         {
-            std::cout << "Please enter valid coordinates!";
+            std::cout << "Please enter valid coordinates! : ";
             std::cin >> x;
             std::cin >> y;
         }
@@ -326,14 +407,50 @@ void game()
                 replace_bomb(real_matrix, x, y, n, n);
                 real_matrix[x][y] = MATRIX_FOUNDATION;
                 enumerate_matrix(real_matrix, n, n);
+                player_matrix[x][y] = real_matrix[x][y];
+                counter++;
+                print_matrix(real_matrix, n, n);
+                print_matrix(player_matrix, n, n);
+                replace_empty_spaces(real_matrix, player_matrix, n, n, x, y);
+                reveal_matrix(real_matrix, player_matrix, n, n);
+                continue;
             }
             counter++;
-
+            if (player_matrix[x][y]!=MATRIX_FOUNDATION)
+            {
+                std::cout << "Tile already opened \n"<<"Please enter a valid command : "; continue;
+            }
             if (player_matrix[x][y]=='M')
             {
                 std::cout << "This tile is marked and can't be opened \n"; continue;
             }
-
+            if (real_matrix[x][y]==MATRIX_MINE)
+            {
+                for (size_t i = 0; i < n; i++)
+                {
+                    for (size_t j = 0; j < n; j++)
+                    {
+                        if (real_matrix[i][j]==MATRIX_MINE )
+                        {
+                            player_matrix[i][j] = real_matrix[i][j];
+                        }
+                    }
+                }
+                std::cout << "You lost!";
+                return;
+            }
+            else
+            {
+                if (real_matrix[x][y]=='0')
+                {
+                replace_empty_spaces(real_matrix, player_matrix, n, n, x, y);
+                reveal_matrix(real_matrix, player_matrix, n, n);
+                }
+                else
+                {
+                    player_matrix[x][y] = real_matrix[x][y];
+                }
+            }
         }
         if (command[0] == 'm' && command[1] == 'a' && command[2] == 'r' && command[3] == 'k')
         {
@@ -355,11 +472,8 @@ void game()
             mark(player_matrix, x, y, true);
             marks--;
         }
-        if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd')
-        {
-            game_on=false;
-        }
-        std::cout << "Marks left : " << mines-marks;
+        std::cout << "Marks left : " << mines-marks<<"\n";
+        print_matrix(real_matrix, n, n);
         print_matrix(player_matrix, n, n);
         
     }

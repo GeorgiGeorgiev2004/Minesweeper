@@ -1,21 +1,38 @@
 ﻿  Minesweeper.cpp
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(41,27): warning C4553: '==': result of expression not used; did you intend '='?
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(75,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(75,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(82,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(82,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(89,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(89,30): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(96,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(96,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(103,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(103,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(110,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(110,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(117,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(117,30): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(124,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(124,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(143,28): warning C4018: '<': signed/unsigned mismatch
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(376,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(54,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(54,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(58,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(58,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(62,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(62,34): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(66,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(66,34): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(70,42): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(70,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(74,42): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(74,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(78,42): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(78,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(82,42): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(82,36): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(116,27): warning C4553: '==': result of expression not used; did you intend '='?
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(150,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(150,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(157,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(157,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(164,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(164,30): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(171,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(171,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(178,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(178,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(185,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(185,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(192,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(192,30): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(199,39): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(199,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(218,28): warning C4018: '<': signed/unsigned mismatch
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(488,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(28): warning C4715: 'bombs_makred': not all control paths return a value
   Minesweeper.vcxproj -> D:\su Education\Minesweeper\Minesweeper\x64\Debug\Minesweeper.exe
