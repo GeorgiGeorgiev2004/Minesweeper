@@ -17,6 +17,47 @@ bool is_in_matrix(int row, int col, int rows, int cols)
 {
     return (row >= 0) && (row < rows) && (col >= 0) && (col < cols);
 }
+void mark(char** matrix, int row, int col, bool marked)
+{
+    if (marked)
+    {
+        matrix[row][col] = MATRIX_FOUNDATION;
+    }
+    if (!marked)
+    {
+        matrix[row][col] = 'M';
+    }
+}
+void replace_bomb(char** matrix, int row, int col, int rows, int cols)
+{
+    bool map[MAX_SIZE][MAX_SIZE] = { {0} };
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            if (matrix[i][j] == MATRIX_MINE)
+            {
+                map[i][j] == 1;
+            }
+        }
+    }
+    for (unsigned i = 0; i < 1;)
+    {
+        int x = rand() % rows;
+        int y = rand() % cols;
+        //Better safe then sorry
+        if (x >= 0 && y >= 0 && x < cols && y < rows && x != row && y != col)
+        {
+            if (map[x][y] == false)
+            {
+                matrix[x][y] = ::MATRIX_MINE;
+                map[x][y] = true;
+                i++;
+            }
+        }
+    }
+}
 #pragma region Matrix_lifespan
 
 //puts the numbers that indicate the count of mines around each element in the matrix.
@@ -114,7 +155,6 @@ void place_mines(char** matrix, const int rows, const int cols, const int mine_c
             }
         }
     }
-
 }
 
 //prints out a matrix.
@@ -195,7 +235,13 @@ void welcome_text() {
     }
 }
 
-int try_terminate()
+int try_terminate(char** real_matrix, char** player_matrix, int row, int col, int rows, int cols)
+{
+
+
+    return 1;
+}
+
 
 //Core game mechanics.
 void game()
@@ -233,25 +279,94 @@ void game()
 #pragma endregion
 
     bool game_on = true;
-    while (game_on)
-    {
-        print_matrix(player_matrix, n, n);
-        std::cout << "Enter your move as follows - > x y : ";
+    int marks = 0;
+
+    int counter = 0;
+  
+    std::cout << "You can mark, unravel or unmark a tile by the following commands : \n"
+        << "Unravel : open x y \n"
+        << "Mark : mark x y \n"
+        << "Unmark : unmark x y \n";
+    while (game_on) {
+        char command[6] = { 0 };
         int x = 0;
         int y = 0;
+        int ctr = 0;
+        for (size_t i = 0; i < 12; i++)
+        {
+            std::cin >> command[i];
+            ctr++;
+            if (command[0] == 'o' && command[1] == 'p' && command[2] == 'e' && command[3] == 'n') break;
+            if (command[0] == 'm' && command[1] == 'a' && command[2] == 'r' && command[3] == 'k') break;
+            if (command[0] == 'u' && command[1] == 'n' && command[2] == 'm' && command[3] == 'a' && command[4] == 'r' && command[5] == 'k') break;
+            if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd')break;
+            if (ctr == 6)break;
+        }
+        while (true)
+        {
+            if (command[0] == 'o' && command[1] == 'p' && command[2] == 'e' && command[3] == 'n') break;
+            if (command[0] == 'm' && command[1] == 'a' && command[2] == 'r' && command[3] == 'k') break;
+            if (command[0] == 'u' && command[1] == 'n' && command[2] == 'm' && command[3] == 'a' && command[4] == 'r' && command[5] == 'k') break;
+            if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd')break;
+            std::cout << "Please enter a valid command!";
+            std::cin >> command;
+        }
         std::cin >> x;
         std::cin >> y;
-        while (x > n || y > n || x < 0 || y < 0)
+        while (x > n - 1 || y > n - 1 || x < 0 || y < 0)
         {
             std::cout << "Please enter valid coordinates!";
             std::cin >> x;
             std::cin >> y;
         }
+        if (command[0] == 'o' && command[1] == 'p' && command[2] == 'e' && command[3] == 'n')
+        {
+            if (real_matrix[x][y] == MATRIX_MINE && counter == 0)
+            {
+                replace_bomb(real_matrix, x, y, n, n);
+                real_matrix[x][y] = MATRIX_FOUNDATION;
+                enumerate_matrix(real_matrix, n, n);
+            }
+            counter++;
+
+            if (player_matrix[x][y]=='M')
+            {
+                std::cout << "This tile is marked and can't be opened \n"; continue;
+            }
+
+        }
+        if (command[0] == 'm' && command[1] == 'a' && command[2] == 'r' && command[3] == 'k')
+        {
+            if (player_matrix[x][y]=='M')
+            {
+                std::cout << "position is already marked \n";
+                continue;
+            }
+            mark(player_matrix, x, y, false);
+            marks++;
+        }
+        if (command[0] == 'u' && command[1] == 'n' && command[2] == 'm' && command[3] == 'a' && command[4] == 'r' && command[5] == 'k')
+        {
+            if (player_matrix[x][y] != 'M')
+            {
+                std::cout << "position is not marked \n";
+                continue;
+            }
+            mark(player_matrix, x, y, true);
+            marks--;
+        }
+        if (command[0] == 'e' && command[1] == 'n' && command[2] == 'd')
+        {
+            game_on=false;
+        }
+        std::cout << "Marks left : " << mines-marks;
+        print_matrix(player_matrix, n, n);
+        
     }
-
-
 #pragma region CleanUp
+    
     delete_matrix(real_matrix, n); delete_matrix(player_matrix, n); //Actively hoping this works.
+
 #pragma endregion
 }
 int main()
