@@ -4,7 +4,7 @@
 const int MAX_SIZE = 10;
 const int MIN_SIZE = 3;
 const int MIN_MINES = 1;
-const int MATRIX_FOUNDATION = 35; // ASCII code for #
+const int MATRIX_FOUNDATION = 45; // ASCII code for #
 const int MATRIX_MINE = '*';
 
 // I'm not really sure if using built in randomisers is allowed 
@@ -17,6 +17,7 @@ bool is_in_matrix(int row, int col, int rows, int cols)
 {
     return (row >= 0) && (row < rows) && (col >= 0) && (col < cols);
 }
+#pragma region Matrix_lifespan
 
 //puts the numbers that indicate the count of mines around each element in the matrix.
 void enumerate_matrix(char** matrix, const int rows, const int cols)
@@ -26,7 +27,7 @@ void enumerate_matrix(char** matrix, const int rows, const int cols)
         for (size_t j = 0; j < cols; j++)
         {
             int count = 0;
-            if (matrix[i][j]==MATRIX_MINE)
+            if (matrix[i][j] == MATRIX_MINE)
             {
                 continue;
             }
@@ -53,7 +54,7 @@ void enumerate_matrix(char** matrix, const int rows, const int cols)
             }
             if (is_in_matrix(i + 1, j - 1, rows, cols))
             {
-                if (matrix[i +1][j-1] == MATRIX_MINE)
+                if (matrix[i + 1][j - 1] == MATRIX_MINE)
                 {
                     count++;
                 }
@@ -86,7 +87,7 @@ void enumerate_matrix(char** matrix, const int rows, const int cols)
                     count++;
                 }
             }
-            matrix[i][j] = count+48;
+            matrix[i][j] = count + 48;
         }
     }
 }
@@ -119,7 +120,20 @@ void place_mines(char** matrix, const int rows, const int cols, const int mine_c
 //prints out a matrix.
 void print_matrix(char** matrix, const int rows, const int cols)
 {
+    std::cout << "  | ";
+    for (size_t i = 0; i < cols; i++)
+    {
+        std::cout << i << " ";
+    }
+    std::cout << "\n";
+    for (size_t i = 0; i < cols + 1; i++)
+    {
+        std::cout << (char)196 << " ";
+
+    }
+    std::cout << "\n";
     for (int i = 0; i < rows; ++i) {
+        std::cout << i << " | ";
         for (int j = 0; j < cols; ++j) {
             std::cout << matrix[i][j] << " ";
         }
@@ -142,10 +156,7 @@ void initialise_matrix(char** matrix, const int rows, const int cols)
 {
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            //if (matrix[i][j]!=MATRIX_MINE&&matrix[i][j]<48|| matrix[i][j] != MATRIX_MINE && matrix[i][j] > 57)
-            //{
             matrix[i][j] = ::MATRIX_FOUNDATION;
-            //}
         }
     }
 
@@ -157,7 +168,11 @@ void delete_matrix(char** matrix, int rows) {
     }
     delete[] matrix;
 }
+#pragma endregion
 
+
+
+//Writes out a Welcoming message on the console.
 void welcome_text() {
     const char* minesweeperText[] = {
         "          __          __  _                            _              \n"
@@ -180,16 +195,12 @@ void welcome_text() {
     }
 }
 
-int you_ai() 
-{
-    welcome_text();
+int try_terminate()
 
-}
-
-int main()
+//Core game mechanics.
+void game()
 {
-    //BEWARE THIS NEEEDS TO BE IMPLEMENTED FURHTER (LOADING TIME IS LONGER IF IN ITS OWN FUNCTION. AS SUCH IT WILL BE LOADED WHILE IN THE MENU(TO BE IMPLEMENTED))
-    srand(time(NULL));
+#pragma region Configuration
 
     //Input size of matrix
     int n = 0;
@@ -211,13 +222,43 @@ int main()
         std::cout << "Please enter a valid amount of mines between " << MIN_MINES << " to " << n << " : " << std::endl;
         std::cin >> mines;
     }
-    char** matrix = create_matrix(n, n);
-    // for now comment will use later;
-    //initialise_matrix(matrix, n, n);
-    //
-    //place_mines(matrix, n, n, mines);
-    //enumerate_matrix(matrix, n, n);
-    //print_matrix(matrix, n, n);
-    //delete_matrix(matrix, n);
-    // Actively hoping this works.
+    char** real_matrix = create_matrix(n, n);
+    char** player_matrix = create_matrix(n, n);
+
+    //what the player sees.
+    initialise_matrix(player_matrix, n, n);
+    place_mines(real_matrix, n, n, mines);
+    enumerate_matrix(real_matrix, n, n);
+    print_matrix(real_matrix, n, n);
+#pragma endregion
+
+    bool game_on = true;
+    while (game_on)
+    {
+        print_matrix(player_matrix, n, n);
+        std::cout << "Enter your move as follows - > x y : ";
+        int x = 0;
+        int y = 0;
+        std::cin >> x;
+        std::cin >> y;
+        while (x > n || y > n || x < 0 || y < 0)
+        {
+            std::cout << "Please enter valid coordinates!";
+            std::cin >> x;
+            std::cin >> y;
+        }
+    }
+
+
+#pragma region CleanUp
+    delete_matrix(real_matrix, n); delete_matrix(player_matrix, n); //Actively hoping this works.
+#pragma endregion
+}
+int main()
+{
+    welcome_text();
+
+    srand(time(NULL));
+
+    game();
 }
