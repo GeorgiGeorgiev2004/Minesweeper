@@ -6,44 +6,95 @@ const int MIN_SIZE = 3;
 const int MIN_MINES = 1;
 const int MATRIX_FOUNDATION = 45; // ASCII code for #
 const int MATRIX_MINE = '*';
-const int MATRIX_REVEALED_SIGN = 46;
+const int MATRIX_REVEALED_SIGN = 46; //ASCII code for .
 
-// I'm not really sure if using built in randomisers is allowed 
-// Having pondered on this question for a while I came to a realisation
-// I appear to be lacking the capabilities to implement it in another way.
-// As such I will take advantage of all such functionality.
+#pragma region CoreGameMechanaics
 
-bool bombs_makred(char** real,char** player,int rows,int cols) 
+//simple function that verifies that a certain element is in the boundaries of the array.
+bool is_in_matrix(int row, int col, int rows, int cols)
+{
+    return (row >= 0) && (row < rows) && (col >= 0) && (col < cols);
+}
+
+//puts the numbers that indicate the count of mines around each element in the matrix
+void enumerate_matrix(char** matrix, const int rows, const int cols)
 {
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            if (real[i][j]==MATRIX_MINE&&player[i][j]!='M')
+            int count = 0;
+            if (matrix[i][j] == MATRIX_MINE)continue;
+
+            if (is_in_matrix(i - 1, j, rows, cols)) {
+                if (matrix[i - 1][j] == MATRIX_MINE)  count++;
+            }
+            if (is_in_matrix(i - 1, j - 1, rows, cols)) {
+                if (matrix[i - 1][j - 1] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i, j - 1, rows, cols)) {
+                if (matrix[i][j - 1] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i + 1, j - 1, rows, cols)) {
+                if (matrix[i + 1][j - 1] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i + 1, j, rows, cols)) {
+                if (matrix[i + 1][j] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i + 1, j + 1, rows, cols)) {
+                if (matrix[i + 1][j + 1] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i, j + 1, rows, cols)) {
+                if (matrix[i][j + 1] == MATRIX_MINE) count++;
+            }
+            if (is_in_matrix(i - 1, j + 1, rows, cols)) {
+                if (matrix[i - 1][j + 1] == MATRIX_MINE) count++;
+            } matrix[i][j] = count + 48;
+        }
+    }
+}
+
+// I'm not really sure if using built in randomisers is allowed
+void place_mines(char** matrix, const int rows, const int cols, const int mine_count)
+{
+    //declaring a matrix to keep track of where the mines are.
+    bool map[MAX_SIZE][MAX_SIZE] = { {0} };
+
+    // We dont change the declared variable i in the for because we validate the existance of a bomb on the same tile
+    for (unsigned i = 0; i < mine_count;)
+    {
+        int x = rand() % rows;
+        int y = rand() % cols;
+        //Better safe then sorry
+        if (x >= 0 && y >= 0 && x < cols && y < rows)
+        {
+            if (map[x][y] == false)
             {
-                return false;
+                matrix[x][y] = ::MATRIX_MINE;
+                map[x][y] = true;
+                i++;
+                //i changes only when valid coordinates are applied for a bomb position.
             }
         }
     }
 }
 
-//simple function that verifies that a certain element is in the voundaries of the array.
-bool is_in_matrix(int row, int col, int rows, int cols)
-{
-    return (row >= 0) && (row < rows) && (col >= 0) && (col < cols);
-}
 //Marks a tile or unmarks is depending on the bool variable marked
-void mark(char** matrix, int row, int col, bool marked)
+bool mark(char** matrix, int row, int col, bool marked)
 {
-    if (marked)
+    if (matrix[row][col] == MATRIX_FOUNDATION)
     {
-        matrix[row][col] = MATRIX_FOUNDATION;
+        if (marked){
+            matrix[row][col] = MATRIX_FOUNDATION;
+        }
+        if (!marked){
+            matrix[row][col] = 'M';
+        }
+        return true;
     }
-    if (!marked)
-    {
-        matrix[row][col] = 'M';
-    }
+    return false;
 }
+
 // After switching all seen 0's to the MATRIX_REVEALED_SIGN we reveal all tiles surrounding them.
 void reveal_matrix(char** real_matrix, char** player_matrix,int rows,int cols)
 {
@@ -51,62 +102,36 @@ void reveal_matrix(char** real_matrix, char** player_matrix,int rows,int cols)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            //A lot of if's for a rather easy task.
             if (real_matrix[i][j] == MATRIX_REVEALED_SIGN)
             {
-                if (is_in_matrix(i - 1, j, rows, cols))
-                {
-                    player_matrix[i - 1][j] = real_matrix[i - 1][j];
-                }
-                if (is_in_matrix(i + 1, j, rows, cols))
-                {
+                if (is_in_matrix(i - 1, j, rows, cols)) { 
+                    player_matrix[i - 1][j] = real_matrix[i - 1][j]; }
+                if (is_in_matrix(i + 1, j, rows, cols)){
                     player_matrix[i + 1][j] = real_matrix[i + 1][j];
                 }
-                if (is_in_matrix(i, j+1, rows, cols))
-                {
+                if (is_in_matrix(i, j+1, rows, cols)){
                     player_matrix[i ][j+1] = real_matrix[i][j+1];
                 }
-                if (is_in_matrix(i, j-1, rows, cols))
-                {
+                if (is_in_matrix(i, j-1, rows, cols)){
                     player_matrix[i][j-1] = real_matrix[i][j-1];
                 }
-                if (is_in_matrix(i - 1, j-1, rows, cols))
-                {
+                if (is_in_matrix(i - 1, j-1, rows, cols)){
                     player_matrix[i - 1][j-1] = real_matrix[i - 1][j-1];
                 }
-                if (is_in_matrix(i - 1, j+1, rows, cols))
-                {
+                if (is_in_matrix(i - 1, j+1, rows, cols)){
                     player_matrix[i - 1][j+1] = real_matrix[i - 1][j+1];
                 }
-                if (is_in_matrix(i + 1, j-1, rows, cols))
-                {
+                if (is_in_matrix(i + 1, j-1, rows, cols)){
                     player_matrix[i + 1][j-1] = real_matrix[i + 1][j - 1];
                 }
-                if (is_in_matrix(i + 1, j+1, rows, cols))
-                {
+                if (is_in_matrix(i + 1, j+1, rows, cols)){
                     player_matrix[i + 1][j+1] = real_matrix[i + 1][j + 1];
                 }
             }
         }
     }
 }
-//Flood Fill algorithm reveals all the 0's the real matrix.
-void replace_empty_spaces(char** real_matrix,char** player_matrix,int rows,int cols,int row,int col) 
-{
-    if (!is_in_matrix(row,col,rows,cols)|| real_matrix[row][col] != '0')
-    {
-        return;
-    }
-    real_matrix[row][col] = MATRIX_REVEALED_SIGN;
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col+1);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col-1);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col-1);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col+1);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col+1);
-    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col-1);
-}
+
 //basic rewrite of the place_bomb function 
 void replace_bomb(char** matrix, int row, int col, int rows, int cols)
 {
@@ -138,104 +163,59 @@ void replace_bomb(char** matrix, int row, int col, int rows, int cols)
         }
     }
 }
-#pragma region Matrix_lifespan
 
-//puts the numbers that indicate the count of mines around each element in the matrix.
-void enumerate_matrix(char** matrix, const int rows, const int cols)
+//Flood Fill algorithm reveals all the 0's the real matrix.
+void replace_empty_spaces(char** real_matrix,char** player_matrix,int rows,int cols,int row,int col) 
+{
+    if (!is_in_matrix(row,col,rows,cols)|| real_matrix[row][col] != '0')
+    {
+        return;
+    }
+    real_matrix[row][col] = MATRIX_REVEALED_SIGN;
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row, col-1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col-1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row-1, col+1);
+    replace_empty_spaces(real_matrix, player_matrix, rows, cols, row+1, col-1);
+}
+
+//End game Validators
+
+//Checks if all the bombs are marked.
+bool bombs_makred(char** real,char** player,int rows,int cols) 
 {
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            int count = 0;
-            if (matrix[i][j] == MATRIX_MINE)
+            if (real[i][j]==MATRIX_MINE&&player[i][j]!='M')
             {
-                continue;
+                return false;
             }
-            if (is_in_matrix(i - 1, j, rows, cols))
-            {
-                if (matrix[i - 1][j] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i - 1, j - 1, rows, cols))
-            {
-                if (matrix[i - 1][j - 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i, j - 1, rows, cols))
-            {
-                if (matrix[i][j - 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i + 1, j - 1, rows, cols))
-            {
-                if (matrix[i + 1][j - 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i + 1, j, rows, cols))
-            {
-                if (matrix[i + 1][j] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i + 1, j + 1, rows, cols))
-            {
-                if (matrix[i + 1][j + 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i, j + 1, rows, cols))
-            {
-                if (matrix[i][j + 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            if (is_in_matrix(i - 1, j + 1, rows, cols))
-            {
-                if (matrix[i - 1][j + 1] == MATRIX_MINE)
-                {
-                    count++;
-                }
-            }
-            matrix[i][j] = count + 48;
         }
     }
 }
-
-//generates the mines and places them in the matrix.
-void place_mines(char** matrix, const int rows, const int cols, const int mine_count)
+int count_unopened_tiles(char** player_matrix,int rows,int cols) 
 {
-    //declaring a matrix to keep track of where the mines are.
-    bool map[MAX_SIZE][MAX_SIZE] = { {0} };
-
-    // We dont change the declared variable i in the for because we validate the existance of a bomb on the same tile
-    for (unsigned i = 0; i < mine_count;)
+    int result = 0;
+    for (unsigned i = 0; i < rows; i++)
     {
-        int x = rand() % rows;
-        int y = rand() % cols;
-        //Better safe then sorry
-        if (x >= 0 && y >= 0 && x < cols && y < rows)
+        for (unsigned j = 0; j < cols; j++)
         {
-            if (map[x][y] == false)
+            if (player_matrix[i][j]==MATRIX_FOUNDATION)
             {
-                matrix[x][y] = ::MATRIX_MINE;
-                map[x][y] = true;
-                i++;
+                result++;
             }
         }
     }
+    return result;
 }
+#pragma endregion
+
+#pragma region Matrix_lifespan
 
 //prints out a matrix.
 void print_matrix(char** matrix, const int rows, const int cols)
@@ -262,6 +242,7 @@ void print_matrix(char** matrix, const int rows, const int cols)
     std::cout << "\n";
 }
 
+//dynamically creates a matrix.
 char** create_matrix(const int rows, const int cols) {
     char** matrix = new char* [rows];
 
@@ -273,6 +254,7 @@ char** create_matrix(const int rows, const int cols) {
     return matrix;
 }
 
+//Fills all tiles of the matrix with the MATRIZ_FOUNDATION symbol.
 void initialise_matrix(char** matrix, const int rows, const int cols)
 {
     for (int i = 0; i < rows; ++i) {
@@ -280,18 +262,19 @@ void initialise_matrix(char** matrix, const int rows, const int cols)
             matrix[i][j] = ::MATRIX_FOUNDATION;
         }
     }
-
 }
 
+// Deallocates the memory created by create_matrix function
 void delete_matrix(char** matrix, int rows) {
     for (int i = 0; i < rows; ++i) {
         delete[] matrix[i];
     }
     delete[] matrix;
 }
+
 #pragma endregion
 
-
+#pragma region Design
 
 //Writes out a Welcoming message on the console.
 void welcome_text() {
@@ -315,12 +298,15 @@ void welcome_text() {
         std::cout << line << std::endl;
     }
 }
+#pragma endregion
 
-//Core game mechanics.
+
+//Core game mechanics. 
+//I know this is not allowed in the rules but I believe that this function not being separate from main provides higher readability.
+//Also expanding the code -> Adding file reader and writers, leaderboards, accounts etc. <- will be easy with little to no code refactoring.
 void game()
 {
 #pragma region Configuration
-
     //Input size of matrix
     int n = 0;
     std::cout << "Please enter the desired size of field : ";
@@ -367,8 +353,12 @@ void game()
         {
             std::cout << "You won! Congratulations!";
             game_on = false; break;
+        }if (count_unopened_tiles(player_matrix,n,n)==(mines-marks))
+        {
+            std::cout << "You won! Congratulations!";
+            game_on = false; break;
         }
-        char command[6] = { 0 };
+        char command[18] = { 0 };
         int x = 0;
         int y = 0;
         int ctr = 0;
@@ -409,10 +399,10 @@ void game()
                 enumerate_matrix(real_matrix, n, n);
                 player_matrix[x][y] = real_matrix[x][y];
                 counter++;
-                print_matrix(real_matrix, n, n);
-                print_matrix(player_matrix, n, n);
                 replace_empty_spaces(real_matrix, player_matrix, n, n, x, y);
                 reveal_matrix(real_matrix, player_matrix, n, n);
+              //  print_matrix(real_matrix, n, n);
+                print_matrix(player_matrix, n, n);
                 continue;
             }
             counter++;
@@ -436,7 +426,8 @@ void game()
                         }
                     }
                 }
-                std::cout << "You lost!";
+                std::cout << "You lost! \n";
+                print_matrix(player_matrix, n, n);
                 return;
             }
             else
@@ -459,8 +450,7 @@ void game()
                 std::cout << "position is already marked \n";
                 continue;
             }
-            mark(player_matrix, x, y, false);
-            marks++;
+            if(mark(player_matrix, x, y, false))marks++;
         }
         if (command[0] == 'u' && command[1] == 'n' && command[2] == 'm' && command[3] == 'a' && command[4] == 'r' && command[5] == 'k')
         {
@@ -469,11 +459,10 @@ void game()
                 std::cout << "position is not marked \n";
                 continue;
             }
-            mark(player_matrix, x, y, true);
-            marks--;
+            if(mark(player_matrix, x, y, true))marks--;
         }
         std::cout << "Marks left : " << mines-marks<<"\n";
-        print_matrix(real_matrix, n, n);
+       // print_matrix(real_matrix, n, n);
         print_matrix(player_matrix, n, n);
         
     }
@@ -487,6 +476,7 @@ int main()
 {
     welcome_text();
 
+    //Seeds the randomiser so we get map variety.
     srand(time(NULL));
 
     game();
