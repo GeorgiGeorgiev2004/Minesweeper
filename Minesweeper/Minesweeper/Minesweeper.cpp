@@ -334,7 +334,9 @@ void game()
     initialise_matrix(player_matrix, n, n);
     place_mines(real_matrix, n, n, mines);
     enumerate_matrix(real_matrix, n, n);
-    print_matrix(real_matrix, n, n);
+    
+   // print_matrix(real_matrix, n, n);
+
 #pragma endregion
 
     bool game_on = true;
@@ -342,10 +344,11 @@ void game()
 
     int counter = 0;
   
-    std::cout << "You can mark, unravel or unmark a tile by the following commands : \n"
+    std::cout << "\nYou can mark, unravel or unmark a tile by the following commands : \n"
         << "Unravel : open x y \n"
         << "Mark : mark x y \n"
-        << "Unmark : unmark x y \n";
+        << "Unmark : unmark x y \n"
+        << "Or you can give up by entering : end \n \n";
 
     print_matrix(player_matrix, n, n);
     while (game_on) {

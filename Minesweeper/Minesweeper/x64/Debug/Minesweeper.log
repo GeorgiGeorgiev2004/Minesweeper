@@ -35,6 +35,6 @@ D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(127,36): war
 D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(146,27): warning C4553: '==': result of expression not used; did you intend '='?
 D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(204,28): warning C4018: '<': signed/unsigned mismatch
 D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(206,32): warning C4018: '<': signed/unsigned mismatch
-D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(480,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(483,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 D:\su Education\Minesweeper\Minesweeper\Minesweeper\Minesweeper.cpp(200): warning C4715: 'bombs_makred': not all control paths return a value
   Minesweeper.vcxproj -> D:\su Education\Minesweeper\Minesweeper\x64\Debug\Minesweeper.exe
