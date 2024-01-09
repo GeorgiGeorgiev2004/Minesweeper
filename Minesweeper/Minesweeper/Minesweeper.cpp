@@ -312,7 +312,7 @@ void game()
     std::cout << "Please enter the desired size of field : ";
     std::cin >> n;
     //Validaition
-    while (n < 3 || n>10)
+    while (n < MIN_SIZE || n > MAX_SIZE)
     {
         std::cout << "Please enter a valid size in the range " << MIN_SIZE << " to " << MAX_SIZE << " : ";
         std::cin >> n;
@@ -404,7 +404,7 @@ void game()
                 counter++;
                 replace_empty_spaces(real_matrix, player_matrix, n, n, x, y);
                 reveal_matrix(real_matrix, player_matrix, n, n);
-              //  print_matrix(real_matrix, n, n);
+             // print_matrix(real_matrix, n, n);
                 print_matrix(player_matrix, n, n);
                 continue;
             }
