@@ -4,7 +4,7 @@
 <p>
 <strong>The project follows the most basic ruleset of the game :</strong> </br>
 Mark all mines or discover all non-mined tiles and win. </br>
-Hit a mine and get sent to the starting menu again.
+Hit a mine and get sent to the starting menu.
 </p>
 
 ## How to operate the program? 
@@ -28,7 +28,7 @@ When the board is created the game begins!
 >	<li> end : <strong>closes the program with no clear winner or loser.</strong> </li>
 </ol>
 
->>#### When a guess is made the '.' sign replaces all tiles that are connected to your guess </br>but not connected to any mines and are not numbers.
+>>#### When a guess is made the '.' sign replaces all tiles that are connected to your guess </br>but are not connected to any mines and are not numbers.
 >![discover_field](https://github.com/GeorgiGeorgiev2004/Minesweeper/blob/main/Images/first_guess.png)
 
 >>#### When a mine is hit the '*' sign replaces all tiles that were mines.
