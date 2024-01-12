@@ -1,3 +1,19 @@
+/**
+*
+* Solution to course project # 5
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2023/2024
+*
+* @author Georgi Georgiev
+* @idnumber 0MI0600371
+* @compiler Visual Studio
+*
+* <file with all the functionality>
+*
+*/
+
+
 #include <iostream>
 
 
